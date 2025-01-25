@@ -35,17 +35,44 @@ const initialUsers = [
     email: "jane@example.com",
     role: "User",
   },
+  {
+    id: "3",
+    name: "Alice Johnson",
+    email: "alice@example.com",
+    role: "User",
+  },
+  {
+    id: "4",
+    name: "Bob Wilson",
+    email: "bob@example.com",
+    role: "Admin",
+  },
+  {
+    id: "5",
+    name: "Carol Brown",
+    email: "carol@example.com",
+    role: "User",
+  },
+  {
+    id: "6",
+    name: "David Lee",
+    email: "david@example.com",
+    role: "User",
+  },
   // Add more users as needed
 ];
 
 export function UsersTable() {
   const [users, setUsers] = React.useState(initialUsers);
   const [search, setSearch] = React.useState("");
+  const [page, setPage] = React.useState(1);
   const [createDialogOpen, setCreateDialogOpen] = React.useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState<
     (typeof initialUsers)[0] | null
   >(null);
+
+  const itemsPerPage = 5;
 
   const filteredUsers = users.filter(
     (user) =>
@@ -53,6 +80,16 @@ export function UsersTable() {
       user.email.toLowerCase().includes(search.toLowerCase()) ||
       user.role.toLowerCase().includes(search.toLowerCase())
   );
+
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const paginatedUsers = filteredUsers.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  );
+
+  React.useEffect(() => {
+    setPage(1);
+  }, [filteredUsers]);
 
   const handleCreateUser = (user: {
     name: string;
@@ -100,7 +137,7 @@ export function UsersTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredUsers.map((user) => (
+            {paginatedUsers.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className="font-medium">{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
@@ -140,6 +177,32 @@ export function UsersTable() {
             ))}
           </TableBody>
         </Table>
+        <div className="flex items-center justify-between px-2 py-4">
+          <p className="text-sm text-muted-foreground">
+            Showing {paginatedUsers.length} of {filteredUsers.length} users
+          </p>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1}
+            >
+              Previous
+            </Button>
+            <div className="flex items-center justify-center text-sm font-medium">
+              Page {page} of {totalPages}
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page + 1)}
+              disabled={page === totalPages}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
       </div>
 
       <CreateUserDialog
