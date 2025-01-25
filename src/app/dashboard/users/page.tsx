@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { UsersTable } from "./components/user-table";
 
 export const metadata: Metadata = {
   title: "Users",
@@ -8,13 +9,8 @@ export const metadata: Metadata = {
 export default function UsersPage() {
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-3xl font-bold tracking-tight">
-        Welcome to the Users
-      </h1>
-      <p className="text-muted-foreground">
-        This is a modern Users built with Next.js 15, Tailwind CSS, and shadcn
-        UI.
-      </p>
+      <h1 className="text-3xl font-bold tracking-tight">Users</h1>
+      <UsersTable />
     </div>
   );
 }
