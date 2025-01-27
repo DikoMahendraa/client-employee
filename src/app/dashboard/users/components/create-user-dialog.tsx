@@ -59,10 +59,12 @@ export function CreateUserDialog({
   });
 
   React.useEffect(() => {
-    if (defaultValues) {
+    if (open && defaultValues) {
       form.reset(defaultValues);
+    } else {
+      form.reset();
     }
-  }, [defaultValues, form]);
+  }, [defaultValues, form, open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -125,8 +127,9 @@ export function CreateUserDialog({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Admin">Admin</SelectItem>
-                      <SelectItem value="User">User</SelectItem>
+                      <SelectItem value="super admin">Super Admin</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="user">User</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
